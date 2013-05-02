@@ -604,7 +604,7 @@ module DBus
       # don't ask for the same match if we override it
       unless @signal_matchrules.key?(mrs)
         DBus.logger.debug "Asked for a new match"
-        proxy.AddMatch(mrs)
+        proxy.AddMatch(mrs) if @unique_name
       end
       @signal_matchrules[mrs] = slot
     end
@@ -615,7 +615,7 @@ module DBus
         # don't remove nonexisting matches.
         # FIXME if we do try, the Error.MatchRuleNotFound is *not* raised
         # and instead is reported as "no return code for nil"
-        proxy.RemoveMatch(mrs)
+        proxy.RemoveMatch(mrs) if @unique_name
       end
     end
 
