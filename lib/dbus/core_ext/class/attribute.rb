@@ -11,7 +11,7 @@ class Class
   # ==== Examples
   #
   #   class Base
-  #     my_class_attribute :setting
+  #     _dbus_class_attribute :setting
   #   end
   #
   #   class Subclass < Base
@@ -61,25 +61,25 @@ class Class
   #   object.setting = false
   #   object.setting          # => false
   #   Base.setting            # => true
-  def my_class_attribute(*attrs)
+  def _dbus_class_attribute(*attrs)
     instance_reader    = true
     instance_writer    = true
 
     attrs.each do |name|
-      singleton_class.silence_redefinition_of_method(name)
+      singleton_class._dbus_silence_redefinition_of_method(name)
       define_singleton_method(name) { nil }
 
       ivar = "@#{name}".to_sym
 
-      singleton_class.silence_redefinition_of_method("#{name}=")
+      singleton_class._dbus_silence_redefinition_of_method("#{name}=")
       define_singleton_method("#{name}=") do |val|
         singleton_class.class_eval do
-          redefine_method(name) { val }
+          _dbus_redefine_method(name) { val }
         end
 
         if singleton_class?
           class_eval do
-            redefine_method(name) do
+            _dbus_redefine_method(name) do
               if instance_variable_defined? ivar
                 instance_variable_get ivar
               else
@@ -92,7 +92,7 @@ class Class
       end
 
       if instance_reader
-        redefine_method(name) do
+        _dbus_redefine_method(name) do
           if instance_variable_defined?(ivar)
             instance_variable_get ivar
           else
@@ -102,7 +102,7 @@ class Class
       end
 
       if instance_writer
-        redefine_method("#{name}=") do |val|
+        _dbus_redefine_method("#{name}=") do |val|
           instance_variable_set ivar, val
         end
       end

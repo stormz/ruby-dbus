@@ -21,7 +21,7 @@ module DBus
     # The path of the object.
     attr_reader :path
     # The interfaces that the object supports. Hash: String => Interface
-    my_class_attribute :intfs
+    _dbus_class_attribute :intfs
     self.intfs = {}
 
     # The service that the object is exported by.

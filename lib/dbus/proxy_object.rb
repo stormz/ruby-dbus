@@ -102,7 +102,7 @@ module DBus
         # creates a shortcut function that forwards each call to the method on
         # the appropriate intf
         singleton_class.class_eval do
-          redefine_method name do |*args, &reply_handler|
+          _dbus_redefine_method name do |*args, &reply_handler|
             intf.method(name).call(*args, &reply_handler)
           end
         end
